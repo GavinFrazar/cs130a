@@ -30,6 +30,26 @@ int main()
     string prompt_range1    = "Enter the first word:\n\t";
     string prompt_range2    = "Enter the second word:\n\t";
 
+    BST bst;
+    bst.insert_word("m");
+    bst.insert_word("f");
+    bst.insert_word("s");
+    bst.insert_word("a");
+    bst.insert_word("g");
+    bst.insert_word("q");
+    bst.insert_word("r");
+    bst.insert_word("z");
+    bst.insert_word("b");
+    bst.insert_word("w");
+    bst.insert_word("y");
+    
+    auto &words = bst.range("a", "g");
+    for (auto &word : words)
+        cout << word << endl;
+    words = bst.range("a", "g");
+    for (auto &word : words)
+        cout << word << endl;
+
 //loop forever
     while(true)
     {

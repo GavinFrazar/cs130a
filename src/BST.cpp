@@ -2,8 +2,8 @@
 
 void BST::delete_tree(Node * root)
 {
-    using std::vector;
-    vector<Node*> targets;
+    using std::list;
+    list<Node*> targets;
     targets.push_back(root);
     for (auto &target : targets)
     {
@@ -15,7 +15,7 @@ void BST::delete_tree(Node * root)
     }
 }
 
-Node * BST::search_tree(const std::string& word)
+Node * BST::search_tree(std::string word)
 {
     Node* target = this->root;
     while (target != nullptr)
@@ -30,6 +30,11 @@ Node * BST::search_tree(const std::string& word)
     return target;
 }
 
+void BST::to_lower(std::string & s)
+{
+    std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+}
+
 BST::BST()
 {
     this->root = nullptr;
@@ -40,7 +45,7 @@ BST::~BST()
     this->delete_tree(this->root);
 }
 
-bool BST::search_word(const std::string& word)
+bool BST::search_word(std::string word)
 {
     Node* result = search_tree(word);
     if (result != nullptr)
@@ -49,22 +54,46 @@ bool BST::search_word(const std::string& word)
         return false;
 }
 
-void BST::insert_word(const std::string &word)
+void BST::insert_word(std::string word)
 {
+    if (this->root == nullptr)
+    {
+        this->root = new Node(word);
+        return;
+    }
+
     Node* target = this->root;
     while (target != nullptr)
     {
+        Node* parent = target;
         if (word == target->word)
         {
             ++target->counter;
             return;
         }
         else if (word < target->word)
-            target = target->left;
+        {
+            if (target->left != nullptr)
+                target = target->left;
+            else
+            {
+                Node* tmp = new Node(word);
+                target->left = tmp;
+                return;
+            }
+        }
         else if (word > target->word)
-            target = target->right;
-    }
-    target = new Node(word);
+        {
+            if (target->right != nullptr)
+                target = target->right;
+            else
+            {
+                Node* tmp = new Node(word);
+                target->right = tmp;
+                return;
+            }
+        }
+    }    
 }
 
 void BST::delete_word(std::string word)
@@ -74,7 +103,7 @@ void BST::delete_word(std::string word)
     {
         if (target->word == word)
         {
-            if (target->counter == 0)
+            if (target->counter == 1)
             {
                 //replace deleted node with left-most node
                 Node* replacement;
@@ -99,33 +128,35 @@ void BST::sort_tree()
 {
 }
 
-std::vector<std::string> BST::range(std::string word1, std::string word2)
+std::list<std::string> BST::range(std::string word1, std::string word2)
 {
+    std::list<std::string> words;
+    std::list<Node*> targets;
 
-    std::vector<std::string> words;
-    Node* target = this->root;
-    std::vector<Node*> targets;
-    while (target != nullptr)
+    Node* subtree_root = this->root;
+    while (subtree_root != nullptr)
     {
-        if (target->word < word1)
+        if (subtree_root->word < word1)
         {
-            target = target->right;
+            subtree_root = subtree_root->right;
         }
-        else if (target->word > word2)
+        else if (subtree_root->word > word2)
         {
-            target = target->left;
+            subtree_root = subtree_root->left;
         }
-        else //word1 <= target->word <= word2
+        else //word1 <= subtree_root->word <= word2
         {
-            Node* floor = target->left;
-            Node* ceiling = target->right;
+            words.push_back(subtree_root->word);
+            Node* floor = subtree_root->left;
+            Node* ceiling = subtree_root->right;
 
             while (floor != nullptr)
             {
                 if (floor->word >= word1)
                 {
                     words.push_back(floor->word);
-                    //then push all the words in floor->right subtree
+                    Node* target = floor->right;
+                    targets.push_back(target);
                     floor = floor->left;
                 }
                 else
@@ -139,7 +170,8 @@ std::vector<std::string> BST::range(std::string word1, std::string word2)
                 if (ceiling->word <= word2)
                 {
                     words.push_back(ceiling->word);
-                    //then push all words in ceiling->left subtree
+                    Node* target = ceiling->left;
+                    targets.push_back(target);
                     ceiling = ceiling->right;
                 }
                 else
@@ -147,8 +179,19 @@ std::vector<std::string> BST::range(std::string word1, std::string word2)
                     ceiling = ceiling->left;
                 }
             }
+            break;
         }
     }
     
+    for (auto &target : targets)
+    {
+        if (target == nullptr)
+            continue;
+        if (target->left != nullptr)
+            targets.push_back(target->left);
+        if (target->right != nullptr)
+            targets.push_back(target->right);
+        words.push_back(target->word);
+    }
     return words;
 }

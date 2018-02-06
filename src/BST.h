@@ -2,7 +2,8 @@
 #define BST_H
 
 #include <string>
-#include <vector>
+#include <list>
+#include <algorithm>
 
 struct Node
 {
@@ -13,11 +14,12 @@ struct Node
 
     Node()
     { 
-        this->counter = 0;
+        this->counter = 1;
         this->left = nullptr;
         this->right = nullptr;
     }
     Node(const std::string &word)
+        : Node()
     {
         this->word = word;
     }
@@ -30,7 +32,8 @@ class BST
         Node* root;
         //deletes a tree
         void delete_tree(Node* root);
-        Node* search_tree(const std::string& word);
+        Node* search_tree(std::string word);
+        void to_lower(std::string& s);
     public:
         //ctor
         BST();
@@ -42,14 +45,14 @@ class BST
         (b)
         A function for searching a word in the tree (the word may or may not exist).
         */
-        bool search_word(const std::string& word);
+        bool search_word(std::string word);
 
         /*
         (c)
         A function for inserting a new word into the tree or increment the counter if it
         is already inserted.
         */
-        void insert_word(const std::string &word);
+        void insert_word(std::string word);
 
         /*
         (d)
@@ -70,6 +73,6 @@ class BST
         words, the function should find all the words in between. The resulting words need not
         be sorted.
         */
-        std::vector<std::string> range(std::string word1, std::string word2);
+        std::list<std::string> range(std::string word1, std::string word2);
 };
 #endif
