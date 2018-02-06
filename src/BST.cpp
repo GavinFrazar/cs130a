@@ -1,6 +1,6 @@
 #include "BST.h"
 
-void BST::delete_tree(Node *& root)
+void BST::delete_tree(Node * root)
 {
     using std::vector;
     vector<Node*> targets;
@@ -99,31 +99,56 @@ void BST::sort_tree()
 {
 }
 
-std::vector<std::string&> BST::range(std::string word1, std::string word2)
+std::vector<std::string> BST::range(std::string word1, std::string word2)
 {
-    Node* min = this->root;
-    std::vector<Node*> targets;
-    while (min != nullptr)
-    {
-        if (word1 == min->word)
-        {
 
-        }
-        else if (word1 < min->word)
+    std::vector<std::string> words;
+    Node* target = this->root;
+    std::vector<Node*> targets;
+    while (target != nullptr)
+    {
+        if (target->word < word1)
         {
-            targets.push_back(min);
-            min = min->left;
+            target = target->right;
+        }
+        else if (target->word > word2)
+        {
+            target = target->left;
+        }
+        else //word1 <= target->word <= word2
+        {
+            Node* floor = target->left;
+            Node* ceiling = target->right;
+
+            while (floor != nullptr)
+            {
+                if (floor->word >= word1)
+                {
+                    words.push_back(floor->word);
+                    //then push all the words in floor->right subtree
+                    floor = floor->left;
+                }
+                else
+                {
+                    floor = floor->right;
+                }
+            }
+
+            while (ceiling != nullptr)
+            {
+                if (ceiling->word <= word2)
+                {
+                    words.push_back(ceiling->word);
+                    //then push all words in ceiling->left subtree
+                    ceiling = ceiling->right;
+                }
+                else
+                {
+                    ceiling = ceiling->left;
+                }
+            }
         }
     }
     
-    std::vector<std::string&> words;
-    for (auto &target : targets)
-    {
-        if (target->left != nullptr)
-            targets.push_back(target->left);
-        if (target->right != nullptr)
-            targets.push_back(target->right);
-        words.push_back(target->word);
-    }
     return words;
 }

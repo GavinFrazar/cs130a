@@ -29,7 +29,7 @@ class BST
     protected:
         Node* root;
         //deletes a tree
-        void delete_tree(Node* &root);
+        void delete_tree(Node* root);
         Node* search_tree(const std::string& word);
     public:
         //ctor
@@ -70,6 +70,6 @@ class BST
         words, the function should find all the words in between. The resulting words need not
         be sorted.
         */
-        std::vector<std::string&> range(std::string word1, std::string word2);
+        std::vector<std::string> range(std::string word1, std::string word2);
 };
 #endif
