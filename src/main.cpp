@@ -17,7 +17,7 @@ int main()
     string option_delete    = "[3] Delete a word with.";
     string option_sort      = "[4] Sort the binary search tree.";
     string option_range     = "[5] Search for words that lie within a range.";
-    string main_menu =  option_search + "\n"
+    string main_menu =  "\n" + option_search + "\n"
                         + option_insert + "\n"
                         + option_delete + "\n"
                         + option_sort + "\n"
