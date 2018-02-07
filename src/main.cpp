@@ -58,7 +58,8 @@ int main()
     regex rgx("[A-z'-_]+");
 
     ifstream input_file;
-   
+    //open each file, parse and add to BST and HashTable
+
     string seq = "SoMe-capitals some words... more words. ah! whomst've'd in-n-out burger this_iS_whom'st've'd! ";
 
     for (std::sregex_iterator it(seq.begin(), seq.end(), rgx), it_end; it != it_end; ++it)
