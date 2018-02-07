@@ -62,11 +62,6 @@ void BST::sort(Node * root)
     sort(root->right);
 }
 
-void BST::remove_node(Node * target, std::string word)
-{
-    
-}
-
 BST::BST()
 {
     this->root = nullptr;
@@ -126,7 +121,7 @@ void BST::insert_word(std::string word)
                 return;
             }
         }
-    }    
+    }
 }
 
 void BST::delete_word(std::string word)
@@ -147,43 +142,56 @@ void BST::delete_word(std::string word)
         }
         else //target->word == word
         {
-            if (target->left != nullptr && target->right != nullptr)  //two children
+            if (target->counter > 1)
             {
-                //find minimum in right subtree
-                Node* min = target->right;
-                Node** branch_to_min = nullptr;
-                while (min->left != nullptr)
+                --target->counter;
+                return;
+            }
+            else
+            {
+                if (target == this->root)
+                    branch_to_target = &(this->root);
+                if (target->left != nullptr && target->right != nullptr)  //two children
                 {
-                    branch_to_min = &(min->left);
-                    min = min->left;
+                    //find minimum in right subtree
+                    Node* min = target->right;
+                    Node** branch_to_min = nullptr;
+                    while (min->left != nullptr)
+                    {
+                        branch_to_min = &(min->left);
+                        min = min->left;
+                    }
+
+                    if (branch_to_min != nullptr)
+                        *branch_to_min = min->right;
+
+                    min->left = target->left;
+                    if (target->right->word != min->word)
+                        min->right = target->right;
+                    else
+                        min->right = nullptr;
+
+                    if (branch_to_target != nullptr)
+                        *branch_to_target = min;
                 }
-
-                if (branch_to_min != nullptr)
-                    *branch_to_min = min->right;
-
-                min->left = target->left;
-
-                if (target->right->word != min->word)
-                    min->right = target->right;
-                else
-                    min->right = nullptr;
-
-                *branch_to_target = min;
+                else if (target->right != nullptr)  //only a right child
+                {
+                    if (branch_to_target != nullptr)
+                        *branch_to_target = target->right;
+                }
+                else if (target->left != nullptr)  //only a left child
+                {
+                    if (branch_to_target != nullptr)
+                        *branch_to_target = target->left;
+                }
+                else  //no children
+                {
+                    if (branch_to_target != nullptr)
+                        *branch_to_target = nullptr;
+                }
+                delete target;
+                return;
             }
-            else if (target->right != nullptr)  //only a right child
-            {
-                *branch_to_target = target->right;
-            }
-            else if (target->left != nullptr)  //only a left child
-            {
-                *branch_to_target = target->left;
-            }
-            else  //no children
-            {
-                *branch_to_target = nullptr;
-            }
-            delete target;
-            return;
         }
     }
 }

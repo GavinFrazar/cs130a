@@ -5,27 +5,6 @@
 
 #include "BST.h"
 
-void foo()
-{
-    using std::cout;
-    using std::endl;
-    BST bst;
-    bst.insert_word("m");
-    bst.insert_word("f");
-    bst.insert_word("s");
-    bst.insert_word("a");
-    bst.insert_word("g");
-    bst.insert_word("q");
-    bst.insert_word("r");
-    bst.insert_word("z");
-    bst.insert_word("b");
-    bst.insert_word("w");
-    bst.insert_word("y");
-
-    bst.delete_word("s");
-    bst.search_word("s");
-}
-
 int main()
 {
     using std::cin;
@@ -54,18 +33,6 @@ int main()
     string prompt_range1    = "Enter the first word:\n\t";
     string prompt_range2    = "Enter the second word:\n\t";
 
-
-    Node* a = new Node("1");
-    Node* b = new Node("2");
-    Node* c = new Node("3");
-    a->right = b;
-    b->right = c;
-
-    Node** target = &(a->right);
-    *target = c;
-    cout << a->right->word << endl;
-
-
     //regex to parse dataset with
     regex rgx("[A-z'-]+");
 
@@ -76,8 +43,6 @@ int main()
 
     for (std::sregex_iterator it(seq.begin(), seq.end(), rgx), it_end; it != it_end; ++it)
         cout << (*it)[0] << "\n";
-
-    foo();
 
 //loop forever
     while(true)

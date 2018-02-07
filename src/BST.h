@@ -36,7 +36,6 @@ class BST
         void to_lower(std::string& s);
         void range(Node* root, std::string word1, std::string word2);
         void sort(Node* root);
-        void remove_node(Node* root, std::string word);
     public:
         //ctor
         BST();
