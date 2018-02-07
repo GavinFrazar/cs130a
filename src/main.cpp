@@ -22,8 +22,8 @@ void foo()
     bst.insert_word("w");
     bst.insert_word("y");
 
-    bst.range("a", "g");
-    bst.sort();
+    bst.delete_word("s");
+    bst.search_word("s");
 }
 
 int main()
@@ -54,8 +54,20 @@ int main()
     string prompt_range1    = "Enter the first word:\n\t";
     string prompt_range2    = "Enter the second word:\n\t";
 
+
+    Node* a = new Node("1");
+    Node* b = new Node("2");
+    Node* c = new Node("3");
+    a->right = b;
+    b->right = c;
+
+    Node** target = &(a->right);
+    *target = c;
+    cout << a->right->word << endl;
+
+
     //regex to parse dataset with
-    regex rgx("[A-z'-_]+");
+    regex rgx("[A-z'-]+");
 
     ifstream input_file;
     //open each file, parse and add to BST and HashTable
