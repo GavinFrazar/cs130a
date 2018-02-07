@@ -1,5 +1,7 @@
 #include <iostream>
+#include <fstream>
 #include <string>
+#include <regex>
 
 #include "BST.h"
 
@@ -30,6 +32,8 @@ int main()
     using std::cout;
     using std::endl;
     using std::string;
+    using std::regex;
+    using std::ifstream;
 
 //simple text-based user interface
     string option_search    = "[1] Search for a word.";
@@ -49,6 +53,16 @@ int main()
     string prompt_sort      = "Sorting...";
     string prompt_range1    = "Enter the first word:\n\t";
     string prompt_range2    = "Enter the second word:\n\t";
+
+    //regex to parse dataset with
+    regex rgx("[A-z'-_]+");
+
+    ifstream input_file;
+   
+    string seq = "SoMe-capitals some words... more words. ah! whomst've'd in-n-out burger this_iS_whom'st've'd! ";
+
+    for (std::sregex_iterator it(seq.begin(), seq.end(), rgx), it_end; it != it_end; ++it)
+        cout << (*it)[0] << "\n";
 
     foo();
 
