@@ -2,17 +2,11 @@
 
 void BST::delete_tree(Node * root)
 {
-    using std::list;
-    list<Node*> targets;
-    targets.push_back(root);
-    for (auto &target : targets)
-    {
-        if (target->left != nullptr)
-            targets.push_back(target->left);
-        if (target->right != nullptr)
-            targets.push_back(target->right);
-        delete target;
-    }
+    if (root == nullptr)
+        return;
+    delete_tree(root->left);
+    delete_tree(root->right);
+    delete root;
 }
 
 Node * BST::search_tree(std::string word)
@@ -35,6 +29,39 @@ void BST::to_lower(std::string & s)
     std::transform(s.begin(), s.end(), s.begin(), ::tolower);
 }
 
+void BST::range(Node * root, std::string word1, std::string word2)
+{
+    to_lower(word1);
+    to_lower(word2);
+
+    if (root == nullptr)
+        return;
+
+    if (root->word < word1)
+    {
+        range(root->right, word1, word2);
+    }
+    else if (root->word > word2)
+    {
+        range(root->left, word1, word2);
+    }
+    else
+    {
+        range(root->left, word1, word2);
+        std::cout << root->word << std::endl;
+        range(root->right, word1, word2);
+    }
+}
+
+void BST::sort(Node * root)
+{
+    if (root == nullptr)
+        return;
+    sort(root->left);
+    std::cout << root->word << std::endl;
+    sort(root->right);
+}
+
 BST::BST()
 {
     this->root = nullptr;
@@ -47,6 +74,7 @@ BST::~BST()
 
 bool BST::search_word(std::string word)
 {
+    to_lower(word);
     Node* result = search_tree(word);
     if (result != nullptr)
         return true;
@@ -56,6 +84,7 @@ bool BST::search_word(std::string word)
 
 void BST::insert_word(std::string word)
 {
+    to_lower(word);
     if (this->root == nullptr)
     {
         this->root = new Node(word);
@@ -65,7 +94,6 @@ void BST::insert_word(std::string word)
     Node* target = this->root;
     while (target != nullptr)
     {
-        Node* parent = target;
         if (word == target->word)
         {
             ++target->counter;
@@ -124,74 +152,12 @@ void BST::delete_word(std::string word)
     }
 }
 
-void BST::sort_tree()
+void BST::sort()
 {
+    sort(this->root);
 }
 
-std::list<std::string> BST::range(std::string word1, std::string word2)
+void BST::range(std::string word1, std::string word2)
 {
-    std::list<std::string> words;
-    std::list<Node*> targets;
-
-    Node* subtree_root = this->root;
-    while (subtree_root != nullptr)
-    {
-        if (subtree_root->word < word1)
-        {
-            subtree_root = subtree_root->right;
-        }
-        else if (subtree_root->word > word2)
-        {
-            subtree_root = subtree_root->left;
-        }
-        else //word1 <= subtree_root->word <= word2
-        {
-            words.push_back(subtree_root->word);
-            Node* floor = subtree_root->left;
-            Node* ceiling = subtree_root->right;
-
-            while (floor != nullptr)
-            {
-                if (floor->word >= word1)
-                {
-                    words.push_back(floor->word);
-                    Node* target = floor->right;
-                    targets.push_back(target);
-                    floor = floor->left;
-                }
-                else
-                {
-                    floor = floor->right;
-                }
-            }
-
-            while (ceiling != nullptr)
-            {
-                if (ceiling->word <= word2)
-                {
-                    words.push_back(ceiling->word);
-                    Node* target = ceiling->left;
-                    targets.push_back(target);
-                    ceiling = ceiling->right;
-                }
-                else
-                {
-                    ceiling = ceiling->left;
-                }
-            }
-            break;
-        }
-    }
-    
-    for (auto &target : targets)
-    {
-        if (target == nullptr)
-            continue;
-        if (target->left != nullptr)
-            targets.push_back(target->left);
-        if (target->right != nullptr)
-            targets.push_back(target->right);
-        words.push_back(target->word);
-    }
-    return words;
+    range(this->root, word1, word2);
 }

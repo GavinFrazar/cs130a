@@ -2,7 +2,7 @@
 #define BST_H
 
 #include <string>
-#include <list>
+#include <iostream>
 #include <algorithm>
 
 struct Node
@@ -34,6 +34,8 @@ class BST
         void delete_tree(Node* root);
         Node* search_tree(std::string word);
         void to_lower(std::string& s);
+        void range(Node* root, std::string word1, std::string word2);
+        void sort(Node* root);
     public:
         //ctor
         BST();
@@ -63,9 +65,9 @@ class BST
 
         /*
         (e)
-        A function to sort the words in the tree lexicographically.
+        A function to print the words of the tree in lexicographically sorted order.
         */
-        void sort_tree();
+        void sort();
 
         /*
         (f)
@@ -73,6 +75,6 @@ class BST
         words, the function should find all the words in between. The resulting words need not
         be sorted.
         */
-        std::list<std::string> range(std::string word1, std::string word2);
+        void range(std::string word1, std::string word2);
 };
 #endif
