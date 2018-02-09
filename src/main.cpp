@@ -35,6 +35,9 @@ int main()
     if (ht.search("a"))
         cout << "found it!" << endl;
 
+    ht.delete_word("i");
+    ht.search("i");
+
     //regex to parse dataset with
      regex rgx("[A-z'-]+");
 

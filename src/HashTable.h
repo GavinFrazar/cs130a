@@ -8,9 +8,10 @@ struct HashRow
 {
     std::string word;
     unsigned int count;
+    unsigned int hash;
 
-    HashRow(const std::string& word)
-        : word(word), count(1)
+    HashRow(const std::string& word, unsigned int hash)
+        : word(word), count(1), hash(hash)
     {}
 };
 
@@ -21,8 +22,9 @@ protected:
     HashRow** table;
     unsigned int size;
 
+    //methods
     unsigned int hashKey(std::string word);
-
+    HashRow*& findRow(std::string word, unsigned int hash);
 public:
     //ctors
     HashTable(unsigned int size);
