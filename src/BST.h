@@ -8,29 +8,27 @@
 struct Node
 {
     std::string word;
-    unsigned int counter;
+    unsigned int count;
     Node* left;
     Node* right;
 
-    Node()
-    { 
-        this->counter = 1;
-        this->left = nullptr;
-        this->right = nullptr;
-    }
     Node(const std::string &word)
-        : Node()
-    {
-        this->word = word;
-    }
+        : word(word),
+        count(1),
+        left(nullptr),
+        right(nullptr)
+    {}
 };
 
 class BST
 {
     private:
     protected:
+        //fields
         Node* root;
-        //deletes a tree
+        unsigned long long unique_word_count;
+
+        //methods
         void delete_tree(Node* root);
         Node* find_node(std::string word);
         void to_lower(std::string& s);

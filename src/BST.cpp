@@ -65,11 +65,13 @@ void BST::sort(Node * root)
 BST::BST()
 {
     this->root = nullptr;
+    this->unique_word_count = 0;
 }
 
 BST::~BST()
 {
     this->delete_tree(this->root);
+    this->unique_word_count = 0;
 }
 
 bool BST::search_word(std::string word)
@@ -96,7 +98,7 @@ void BST::insert_word(std::string word)
     {
         if (word == target->word)
         {
-            ++target->counter;
+            ++target->count;
             return;
         }
         else if (word < target->word)
@@ -107,6 +109,7 @@ void BST::insert_word(std::string word)
             {
                 Node* tmp = new Node(word);
                 target->left = tmp;
+                ++this->unique_word_count;
                 return;
             }
         }
@@ -118,6 +121,7 @@ void BST::insert_word(std::string word)
             {
                 Node* tmp = new Node(word);
                 target->right = tmp;
+                ++this->unique_word_count;
                 return;
             }
         }
@@ -142,9 +146,9 @@ void BST::delete_word(std::string word)
         }
         else //target->word == word
         {
-            if (target->counter > 1)
+            if (target->count > 1)
             {
-                --target->counter;
+                --target->count;
                 return;
             }
             else
@@ -190,6 +194,7 @@ void BST::delete_word(std::string word)
                         *branch_to_target = nullptr;
                 }
                 delete target;
+                --this->unique_word_count;
                 return;
             }
         }
