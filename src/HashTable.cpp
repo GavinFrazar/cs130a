@@ -1,16 +1,16 @@
 #include "HashTable.h"
 
-unsigned int HashTable::hashKey(std::string word)
+unsigned int HashTable::hashKey(const std::string &word)
 {
     unsigned int hash = 0;
     for (auto &character : word)
     {
-        hash = hash * 15485863 + character;
+        hash = hash * 31 + character;
     }
     return hash % this->size;
 }
 
-HashRow*& HashTable::findRow(std::string word, unsigned int hash)
+HashRow*& HashTable::findRow(const std::string &word, unsigned int hash)
 {
     auto index = hash;
     do {
@@ -20,7 +20,6 @@ HashRow*& HashTable::findRow(std::string word, unsigned int hash)
             index = (index + 1) % this->size;
     } while (index != hash);
 
-    //looped through entire array and the word was not found -> the word must not be in the table
     return table[index];
 }
 
@@ -37,13 +36,13 @@ HashTable::~HashTable()
     delete[] this->table;
 }
 
-bool HashTable::search(std::string word)
+bool HashTable::search(const std::string &word)
 {
     auto hash = hashKey(word);
-    return (findRow(word, hash) != nullptr);
+    return (findRow(word, hash)->word == word);
 }
 
-void HashTable::insert(std::string word)
+void HashTable::insert(const std::string &word)
 {
     auto hash = hashKey(word);
     HashRow*& target = findRow(word, hash);
@@ -53,7 +52,7 @@ void HashTable::insert(std::string word)
         ++target->count;
 }
 
-void HashTable::delete_word(std::string word)
+void HashTable::delete_word(const std::string &word)
 {
     unsigned int target_row_index = hashKey(word);
     if (table[target_row_index] != nullptr)
@@ -84,7 +83,7 @@ void HashTable::sort()
 
 }
 
-void HashTable::range(std::string word1, std::string word2)
+void HashTable::range(const std::string &word1, const std::string &word2)
 {
     for (unsigned int i = 0; i < this->size; ++i)
         if (table[i]->word >= word1 && table[i]->word <= word2)

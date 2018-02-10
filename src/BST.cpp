@@ -9,7 +9,7 @@ void BST::delete_tree(Node * root)
     delete root;
 }
 
-Node * BST::find_node(std::string word)
+Node * BST::find_node(const std::string & word)
 {
     Node* target = this->root;
     while (target != nullptr)
@@ -24,16 +24,8 @@ Node * BST::find_node(std::string word)
     return target;
 }
 
-void BST::to_lower(std::string & s)
+void BST::range(Node * root, const std::string & word1, const std::string & word2)
 {
-    std::transform(s.begin(), s.end(), s.begin(), ::tolower);
-}
-
-void BST::range(Node * root, std::string word1, std::string word2)
-{
-    to_lower(word1);
-    to_lower(word2);
-
     if (root == nullptr)
         return;
 
@@ -74,9 +66,8 @@ BST::~BST()
     this->unique_word_count = 0;
 }
 
-bool BST::search_word(std::string word)
+bool BST::search_word(const std::string & word)
 {
-    to_lower(word);
     Node* result = find_node(word);
     if (result != nullptr)
         return true;
@@ -84,12 +75,12 @@ bool BST::search_word(std::string word)
         return false;
 }
 
-void BST::insert_word(std::string word)
+void BST::insert(const std::string& word)
 {
-    to_lower(word);
     if (this->root == nullptr)
     {
         this->root = new Node(word);
+        ++this->unique_word_count;
         return;
     }
 
@@ -128,7 +119,7 @@ void BST::insert_word(std::string word)
     }
 }
 
-void BST::delete_word(std::string word)
+void BST::delete_word(const std::string & word)
 {
     Node* target = this->root;
     Node** branch_to_target = nullptr;
@@ -206,7 +197,7 @@ void BST::sort()
     sort(this->root);
 }
 
-void BST::range(std::string word1, std::string word2)
+void BST::range(const std::string & word1, const std::string & word2)
 {
     range(this->root, word1, word2);
 }

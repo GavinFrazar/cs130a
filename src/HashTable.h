@@ -23,8 +23,8 @@ protected:
     unsigned int size;
 
     //methods
-    unsigned int hashKey(std::string word);
-    HashRow*& findRow(std::string word, unsigned int hash);
+    unsigned int hashKey(const std::string &word);
+    HashRow*& findRow(const std::string &word, unsigned int hash);
 public:
     //ctors
     HashTable(unsigned int size);
@@ -33,15 +33,15 @@ public:
     ~HashTable();
 
     //methods
-    bool search(std::string word);
+    bool search(const std::string &word);
 
-    void insert(std::string word);
+    void insert(const std::string &word);
 
-    void delete_word(std::string word);
+    void delete_word(const std::string &word);
 
     void sort();
 
-    void range(std::string word1, std::string word2);
+    void range(const std::string &word1, const std::string &word2);
 };
 
 #endif

@@ -12,7 +12,7 @@ struct Node
     Node* left;
     Node* right;
 
-    Node(const std::string &word)
+    Node(const std::string& word)
         : word(word),
         count(1),
         left(nullptr),
@@ -26,15 +26,15 @@ class BST
     protected:
         //fields
         Node* root;
-        unsigned long long unique_word_count;
 
         //methods
         void delete_tree(Node* root);
-        Node* find_node(std::string word);
-        void to_lower(std::string& s);
-        void range(Node* root, std::string word1, std::string word2);
+        Node* find_node(const std::string & word);
+        void range(Node* root, const std::string & word1, const std::string & word2);
         void sort(Node* root);
     public:
+
+        unsigned long long unique_word_count;
         //ctor
         BST();
 
@@ -45,21 +45,21 @@ class BST
         (b)
         A function for searching a word in the tree (the word may or may not exist).
         */
-        bool search_word(std::string word);
+        bool search_word(const std::string & word);
 
         /*
         (c)
         A function for inserting a new word into the tree or increment the counter if it
         is already inserted.
         */
-        void insert_word(std::string word);
+        void insert(const std::string& word);
 
         /*
         (d)
         A function for deleting a word from the tree if the counter reaches ZERO
         or decrementing the counter by one. Words that do not exist in tree should be ignored.
         */
-        void delete_word(std::string word);
+        void delete_word(const std::string & word);
 
         /*
         (e)
@@ -73,6 +73,6 @@ class BST
         words, the function should find all the words in between. The resulting words need not
         be sorted.
         */
-        void range(std::string word1, std::string word2);
+        void range(const std::string & word1, const std::string & word2);
 };
 #endif

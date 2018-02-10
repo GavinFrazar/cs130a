@@ -2,13 +2,18 @@
 #include <fstream>
 #include <string>
 #include <regex>
-#include <list>
+#include <vector>
+#include <experimental\filesystem>
+#include <sstream>
 
 #include "BST.h"
 #include "HashTable.h"
 
+
 void promptMenu();
 
+namespace fs = std::experimental::filesystem; //potentially needs to be changed on UNIX systems to std::filesystem
+using namespace std;
 int main()
 {
     using std::cin;
@@ -19,38 +24,37 @@ int main()
     using std::ifstream;
     using std::list;
 
-    HashTable ht(15);
-    ht.insert("a");
-    ht.insert("k");
-    ht.insert("g");
-    ht.insert("h");
-    ht.insert("c");
-    ht.insert("i");
-    ht.insert("j");
-    ht.insert("d");
-    ht.insert("b");
-    ht.insert("e");
-    ht.insert("f");
+    string stopwords[127] = { "i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now" };
 
-    if (ht.search("a"))
-        cout << "found it!" << endl;
+    HashTable stopword_table(127);
+    for (unsigned int i = 0; i < 127; ++i)
+        stopword_table.insert(stopwords[i]);
 
-    ht.delete_word("i");
-    ht.search("i");
+    std::string path("hotels");
+    string word;
+    BST bst;
 
-    //regex to parse dataset with
-     regex rgx("[A-z'-]+");
-
-    ifstream input_file;
-    //open each file, parse and add to BST and HashTable
-
-    string seq = "SoMe-capitals some words... more words. ah! whomst've'd in-n-out burger this_iS_whom'st've'd! ";
-
-    for (std::sregex_iterator it(seq.begin(), seq.end(), rgx), it_end; it != it_end; ++it)
-        cout << (*it)[0] << "\n";
-
-//loop forever
-    while(true)
+    //regex to parse data with
+    regex rgx("[a-z'_-]+");
+    for (auto& p : fs::recursive_directory_iterator(path))
+    {
+        if (fs::is_regular_file(p))
+        {
+            cout << p.path() << endl;
+            ifstream input_file;
+            input_file.open(p.path(), std::ios::binary);
+            while (input_file >> word)
+            {
+                std::transform(word.begin(), word.end(), word.begin(), ::tolower);
+                if (!stopword_table.search(word) && std::regex_match(word, rgx))
+                    bst.insert(word);
+            }
+        }
+    }
+    cout << bst.unique_word_count << endl;
+    
+    //loop forever
+    while (true)
     {
         promptMenu();
     }
