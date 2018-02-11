@@ -27,3 +27,5 @@ include_directories(
     )
 
 add_executable(main ${SOURCES} ${HEADERS})
+
+message("CMAKE_CXX_FLAGS SET = {CMAKE_CXX_FLAGS}")
