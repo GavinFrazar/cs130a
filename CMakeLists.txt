@@ -1,11 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
-project(proj01 C CXX)
+project(main C CXX)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-if(UNIX)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++1z -Wall -Wextra -lstdc++fs")
-endif()
 
 set(SOURCES
     ${SOURCES}
@@ -26,4 +25,4 @@ include_directories(
 
 add_executable(main ${SOURCES} ${HEADERS})
 
-message("CMAKE_CXX_FLAGS SET = ${CMAKE_CXX_FLAGS}")
+target_link_libraries(main stdc++fs)
