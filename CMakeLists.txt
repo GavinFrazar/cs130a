@@ -19,7 +19,7 @@ set(HEADERS
     )
 
 include_directories(
-    ${HEADERS}
+    ./src
     )
 
 add_executable(main ${SOURCES} ${HEADERS})
