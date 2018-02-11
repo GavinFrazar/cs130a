@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 
 struct HashRow
 {
@@ -39,7 +40,7 @@ public:
 
     void delete_word(const std::string &word);
 
-    void sort();
+    std::vector<std::string> sort();
 
     void range(const std::string &word1, const std::string &word2);
 };

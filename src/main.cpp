@@ -5,6 +5,8 @@
 #include <experimental/filesystem>
 #include <chrono>
 #include <limits>
+#include <sstream>
+#include <vector>
 
 #include "BST.h"
 #include "HashTable.h"
@@ -25,11 +27,13 @@ int main()
 
     std::string path("hotels");
     std::string word;
-    BST bst;
+    std::vector<std::string> words;
 
+    BST bst;
+    std::stringstream ss;
     //regex to parse data with
     std::regex rgx("[a-z]+[a-z'_-]*");
-    unsigned long long count = 0;
+
     for (auto& p : fs::recursive_directory_iterator(path))
     {
         if (fs::is_regular_file(p))
@@ -39,35 +43,24 @@ int main()
             input_file.open(p.path(), std::ios::binary);
             while (input_file >> word)
             {
-                to_lower(word);
-                if (!stopword_table.search(word) && std::regex_match(word, rgx))
-                {
-                    ++count;
-                    bst.insert(word);
-                }
+                words.push_back(word);
             }
         }
     }
-    std::cout << "unique: " << bst.unique_word_count << std::endl;
-    std::cout << "total: " << count << std::endl;
 
-    std::string option_search = "[1] Search for a word.";
-    std::string option_insert = "[2] Inseart a word.";
-    std::string option_delete = "[3] Delete a word with.";
-    std::string option_sort = "[4] Sort the binary search tree.";
-    std::string option_range = "[5] Search for words that lie within a range.";
-    std::string main_menu = "\n" + option_search + "\n"
-        + option_insert + "\n"
-        + option_delete + "\n"
-        + option_sort + "\n"
-        + option_range + "\n";
+    HashTable ht(words.size());
 
-    std::string prompt_search = "Enter a word to be searched for:\n\t";
-    std::string prompt_insert = "Enter a word to be inserted:\n\t";
-    std::string prompt_delete = "Enter a word to be deleted (or decremented):\n\t";
-    std::string prompt_sort = "Sorting...";
-    std::string prompt_range1 = "Enter the first word:\n\t";
-    std::string prompt_range2 = "Enter the second word:\n\t";
+    for (std::vector<std::string>::iterator it = words.begin(), it_end = words.end(); it != it_end; ++it)
+    {
+        to_lower(*it);
+        if (!stopword_table.search(*it) && std::regex_match(*it, rgx))
+        {
+            bst.insert(*it);
+            ht.insert(*it);
+        }
+    }
+
+
 
     std::cout << std::boolalpha;
     std::cout.precision(17);
@@ -75,14 +68,18 @@ int main()
     //loop forever
     while (true)
     {
-        std::cout << main_menu << std::endl;
         unsigned short option_select;
         std::cin >> option_select;
-        std::cout << std::endl;
+        while (std::cin.fail())
+        {
+            std::cout << "Invalid selection. Enter a valid option [1, 5]:\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<int>::max(), '\n');
+            std::cin >> option_select;
+        }
         if (option_select == 1)
         {
             std::string word;
-            std::cout << prompt_search << std::endl;
             std::cin >> word;
 
             //time bst search
@@ -93,19 +90,18 @@ int main()
             auto ns_bst = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_bst).count();
 
             //time hashtable search
-            //auto start_ht = std::chrono::high_resolution_clock::now();
-            //cout << ht.search(word) << endl;
-            //auto end_ht = std::chrono::high_resolution_clock::now();
-            //auto dur_ht = end_ht - start_ht;
-            //auto ns_ht = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_ht).count();
+            auto start_ht = std::chrono::high_resolution_clock::now();
+            std::cout << ht.search(word) << std::endl;
+            auto end_ht = std::chrono::high_resolution_clock::now();
+            auto dur_ht = end_ht - start_ht;
+            auto ns_ht = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_ht).count();
 
             std::cout << "BST: " << std::fixed << ns_bst / NANOS_PER_SECOND << std::endl;
-            //cout << "Hash: " << fixed <<ns_ht / NANOS_PER_SECOND << endl;
+            std::cout << "Hash: " << std::fixed <<ns_ht / NANOS_PER_SECOND << std::endl;
         }
         else if (option_select == 2)
         {
             std::string word;
-            std::cout << prompt_insert << std::endl;
             std::cin >> word;
 
             //time bst insert
@@ -116,19 +112,18 @@ int main()
             auto ns_bst = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_bst).count();
 
             //time hashtable insert
-            //auto start_ht = std::chrono::high_resolution_clock::now();
-            //ht.insert(word);
-            //auto end_ht = std::chrono::high_resolution_clock::now();
-            //auto dur_ht = end_ht - start_ht;
-            //auto ns_ht = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_ht).count();
+            auto start_ht = std::chrono::high_resolution_clock::now();
+            ht.insert(word);
+            auto end_ht = std::chrono::high_resolution_clock::now();
+            auto dur_ht = end_ht - start_ht;
+            auto ns_ht = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_ht).count();
 
             std::cout << "BST: " << std::fixed << ns_bst / NANOS_PER_SECOND << std::endl;
-            //cout << "Hash: " << fixed <<ns_ht / NANOS_PER_SECOND << endl;
+            std::cout << "Hash: " << std::fixed <<ns_ht / NANOS_PER_SECOND << std::endl;
         }
         else if (option_select == 3)
         {
             std::string word;
-            std::cout << prompt_delete << std::endl;
             std::cin >> word;
 
             //time bst delete
@@ -139,18 +134,17 @@ int main()
             auto ns_bst = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_bst).count();
 
             //time hashtable delete
-            //auto start_ht = std::chrono::high_resolution_clock::now();
-            //ht.delete_word(word);
-            //auto end_ht = std::chrono::high_resolution_clock::now();
-            //auto dur_ht = end_ht - start_ht;
-            //auto ns_ht = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_ht).count();
+            auto start_ht = std::chrono::high_resolution_clock::now();
+            ht.delete_word(word);
+            auto end_ht = std::chrono::high_resolution_clock::now();
+            auto dur_ht = end_ht - start_ht;
+            auto ns_ht = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_ht).count();
 
             std::cout << "BST: " << std::fixed << ns_bst / NANOS_PER_SECOND << std::endl;
-            //cout << "Hash: " << fixed <<ns_ht / NANOS_PER_SECOND << endl;
+            std::cout << "Hash: " << std::fixed <<ns_ht / NANOS_PER_SECOND << std::endl;
         }
         else if (option_select == 4)
         {
-            std::cout << prompt_sort << std::endl;
             std::string sortfile_path;
             std::cin >> sortfile_path;
             std::ofstream out(sortfile_path);
@@ -163,26 +157,22 @@ int main()
             auto ns_bst = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_bst).count();
 
             //time hashtable insert
-            //auto start_ht = std::chrono::high_resolution_clock::now();
-            //string ht_sort = ht.sort();
-            //auto end_ht = std::chrono::high_resolution_clock::now();
-            //auto dur_ht = end_ht - start_ht;
-            //auto ns_ht = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_ht).count();
+            auto start_ht = std::chrono::high_resolution_clock::now();
+            auto ht_sort = ht.sort();
+            auto end_ht = std::chrono::high_resolution_clock::now();
+            auto dur_ht = end_ht - start_ht;
+            auto ns_ht = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_ht).count();
 
-            //string output = bst_sort + "\n" + ht_sort;
-            //out << output;
             out << bst_sort;    //REMOVE ME PLEASE REMOVE ME AHHHHHHHHHHHHH
             out.close();
 
             std::cout << "BST: " << std::fixed << ns_bst / NANOS_PER_SECOND << std::endl;
-            //cout << "Hash: " << fixed <<ns_ht / NANOS_PER_SECOND << endl;
+            std::cout << "Hash: " << std::fixed <<ns_ht / NANOS_PER_SECOND << std::endl;
         }
         else if (option_select == 5)
         {
             std::string word1, word2;
-            std::cout << prompt_range1 << std::endl;
             std::cin >> word1;
-            std::cout << "\n" + prompt_range2 << std::endl;
             std::cin >> word2;
 
             //time bst insert
@@ -191,16 +181,16 @@ int main()
             auto end_bst = std::chrono::high_resolution_clock::now();
             auto dur_bst = end_bst - start_bst;
             auto ns_bst = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_bst).count();
-            
+
             //time hashtable insert
-            //auto start_ht = std::chrono::high_resolution_clock::now();
-            //ht.range(word1,word2);
-            //auto end_ht = std::chrono::high_resolution_clock::now();
-            //auto dur_ht = end_ht - start_ht;
-            //auto ns_ht = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_ht).count();
+            auto start_ht = std::chrono::high_resolution_clock::now();
+            ht.range(word1,word2);
+            auto end_ht = std::chrono::high_resolution_clock::now();
+            auto dur_ht = end_ht - start_ht;
+            auto ns_ht = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_ht).count();
 
             std::cout << "BST: " << std::fixed << ns_bst / NANOS_PER_SECOND << std::endl;
-            //cout << "Hash: " << fixed <<ns_ht / NANOS_PER_SECOND << endl;
+            std::cout << "Hash: " << std::fixed <<ns_ht / NANOS_PER_SECOND << std::endl;
         }
         else
         {

@@ -39,7 +39,11 @@ HashTable::~HashTable()
 bool HashTable::search(const std::string &word)
 {
     auto hash = hashKey(word);
-    return (findRow(word, hash)->word == word);
+    HashRow* row_found = findRow(word, hash);
+    if (row_found != nullptr)
+        return row_found->word == word;
+    else
+        return false;
 }
 
 void HashTable::insert(const std::string &word)
@@ -78,9 +82,19 @@ void HashTable::delete_word(const std::string &word)
     }
 }
 
-void HashTable::sort()
+std::vector<std::string> HashTable::sort()
 {
+    std::vector<std::string> v;
+    v.reserve(this->size);
+    for (unsigned int i = 0; i < this->size; ++i)
+    {
+        if (this->table[i] != nullptr)
+            v.push_back(this->table[i]->word);
+    }
 
+    //sort v
+
+    return v;
 }
 
 void HashTable::range(const std::string &word1, const std::string &word2)

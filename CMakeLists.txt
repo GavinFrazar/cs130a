@@ -26,7 +26,5 @@ include_directories(
 add_executable(main ${SOURCES} ${HEADERS})
 
 if (UNIX)
-
-target_link_libraries(main stdc++fs)
-
+    target_link_libraries(main stdc++fs)
 endif(UNIX)
