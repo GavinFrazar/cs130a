@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 project(proj01 C CXX)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 if(UNIX)
@@ -28,4 +26,4 @@ include_directories(
 
 add_executable(main ${SOURCES} ${HEADERS})
 
-message("CMAKE_CXX_FLAGS SET = {CMAKE_CXX_FLAGS}")
+message("CMAKE_CXX_FLAGS SET = ${CMAKE_CXX_FLAGS}")
