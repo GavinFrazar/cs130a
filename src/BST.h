@@ -3,7 +3,6 @@
 
 #include <string>
 #include <iostream>
-#include <algorithm>
 
 struct Node
 {
@@ -29,9 +28,8 @@ class BST
 
         //methods
         void delete_tree(Node* root);
-        Node* find_node(const std::string & word);
         void range(Node* root, const std::string & word1, const std::string & word2);
-        void sort(Node* root);
+        void sort(Node* root, std::string& output);
     public:
 
         unsigned long long unique_word_count;
@@ -45,7 +43,7 @@ class BST
         (b)
         A function for searching a word in the tree (the word may or may not exist).
         */
-        bool search_word(const std::string & word);
+        bool search(const std::string & word);
 
         /*
         (c)
@@ -65,7 +63,7 @@ class BST
         (e)
         A function to print the words of the tree in lexicographically sorted order.
         */
-        void sort();
+        std::string sort();
 
         /*
         (f)

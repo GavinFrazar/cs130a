@@ -15,7 +15,7 @@ HashRow*& HashTable::findRow(const std::string &word, unsigned int hash)
     auto index = hash;
     do {
         if (table[index] == nullptr || table[index]->word == word)
-            return table[index];
+            break;
         else
             index = (index + 1) % this->size;
     } while (index != hash);

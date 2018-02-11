@@ -2,7 +2,7 @@
 #define HASHTABLE_H
 
 #include <string>
-#include "BST.h"
+#include <iostream>
 
 struct HashRow
 {

@@ -9,49 +9,35 @@ void BST::delete_tree(Node * root)
     delete root;
 }
 
-Node * BST::find_node(const std::string & word)
-{
-    Node* target = this->root;
-    while (target != nullptr)
-    {
-        if (target->word == word)
-            break;
-        else if (word < target->word)
-            target = target->left;
-        else if (word > target->word)
-            target = target->right;
-    }
-    return target;
-}
-
 void BST::range(Node * root, const std::string & word1, const std::string & word2)
 {
     if (root == nullptr)
         return;
 
-    if (root->word < word1)
-    {
-        range(root->right, word1, word2);
-    }
-    else if (root->word > word2)
-    {
-        range(root->left, word1, word2);
-    }
-    else
-    {
-        range(root->left, word1, word2);
+    /* if (root->word < word1)
+     {
+         range(root->right, word1, word2);
+     }
+     else if (root->word > word2)
+     {
+         range(root->left, word1, word2);
+     }
+     else
+     {*/
+    range(root->left, word1, word2);
+    if (root->word >= word1 && root->word <= word2)
         std::cout << root->word << std::endl;
-        range(root->right, word1, word2);
-    }
+    range(root->right, word1, word2);
+
 }
 
-void BST::sort(Node * root)
+void BST::sort(Node * root, std::string& output)
 {
     if (root == nullptr)
         return;
-    sort(root->left);
-    std::cout << root->word << std::endl;
-    sort(root->right);
+    sort(root->left, output);
+    output.append(root->word + "\n");
+    sort(root->right, output);
 }
 
 BST::BST()
@@ -66,13 +52,20 @@ BST::~BST()
     this->unique_word_count = 0;
 }
 
-bool BST::search_word(const std::string & word)
+bool BST::search(const std::string & word)
 {
-    Node* result = find_node(word);
-    if (result != nullptr)
-        return true;
-    else
-        return false;
+    Node* target = root;
+    while (target != nullptr)
+    {
+        int compare = word.compare(target->word);
+        if (compare == 0)
+            return true;
+        else if (compare < 0)
+            target = target->left;
+        else
+            target = target->right;
+    }
+    return false;
 }
 
 void BST::insert(const std::string& word)
@@ -192,9 +185,11 @@ void BST::delete_word(const std::string & word)
     }
 }
 
-void BST::sort()
+std::string BST::sort()
 {
-    sort(this->root);
+    std::string output = "";
+    sort(this->root, output);
+    return output;
 }
 
 void BST::range(const std::string & word1, const std::string & word2)
