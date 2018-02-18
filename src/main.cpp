@@ -207,7 +207,7 @@ int main()
 
             //time bst insert
             auto start_bst = std::chrono::high_resolution_clock::now();
-            std::vector<std::string>& bst_sorted = bst.sort();
+            const std::vector<std::string>& bst_sorted = bst.sort();
             auto end_bst = std::chrono::high_resolution_clock::now();
             auto dur_bst = end_bst - start_bst;
             auto ns_bst = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_bst).count();
@@ -216,7 +216,7 @@ int main()
 
             //time hashtable insert
             auto start_ht = std::chrono::high_resolution_clock::now();
-            std::vector < std::string>& ht_sorted = ht.sort();
+            const std::vector < std::string>& ht_sorted = ht.sort();
             auto end_ht = std::chrono::high_resolution_clock::now();
             auto dur_ht = end_ht - start_ht;
             auto ns_ht = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_ht).count();
@@ -242,14 +242,14 @@ int main()
             auto ns_bst = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_bst).count();
 
             //time hashtable insert
-            auto start_ht = std::chrono::high_resolution_clock::now();
-            ht.range(word1, word2);
-            auto end_ht = std::chrono::high_resolution_clock::now();
-            auto dur_ht = end_ht - start_ht;
-            auto ns_ht = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_ht).count();
+            //auto start_ht = std::chrono::high_resolution_clock::now();
+            //ht.range(word1, word2);
+            //auto end_ht = std::chrono::high_resolution_clock::now();
+	    // auto dur_ht = end_ht - start_ht;
+            //auto ns_ht = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_ht).count();
 
             std::cout << "BST: " << std::fixed << ns_bst / NANOS_PER_SECOND << std::endl;
-            std::cout << "Hash: " << std::fixed << ns_ht / NANOS_PER_SECOND << std::endl;
+            //std::cout << "Hash: " << std::fixed << ns_ht / NANOS_PER_SECOND << std::endl;
         }
         else
         {
