@@ -43,7 +43,7 @@ int main()
             while (input_file >> token)
             {
                 to_lower(token);
-                for (std::sregex_iterator it(token.begin(), token.end(),rgx), it_end; it != it_end; ++it)
+                for (std::sregex_iterator it(token.begin(), token.end(), rgx), it_end; it != it_end; ++it)
                 {
                     std::string word = it->str();
                     if (!stopword_table.search(word))
@@ -61,10 +61,66 @@ int main()
         ht.insert(*it);
     }
 
-
-
     std::cout << std::boolalpha;
     std::cout.precision(17);
+
+    BST bst_test;
+    HashTable ht_test(150);
+
+    //insert into bst
+    auto start_test = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < 100; ++i)
+        bst_test.insert(stopwords[i]);
+    auto end_test = std::chrono::high_resolution_clock::now();
+    auto dur_test = end_test - start_test;
+    auto ns_test = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_test).count();
+    std::cout << "BST 100 inserts:\t" << std::fixed << ns_test / NANOS_PER_SECOND << std::endl;
+
+    //insert into hashtable
+    start_test = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < 100; ++i)
+        ht_test.insert(stopwords[i]);
+    end_test = std::chrono::high_resolution_clock::now();
+    dur_test = end_test - start_test;
+    ns_test = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_test).count();
+    std::cout << "HashTable 100 inserts:\t" << std::fixed << ns_test / NANOS_PER_SECOND << std::endl;
+    
+    //search bst
+    start_test = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < 100; ++i)
+        bst_test.search(stopwords[i]);
+    end_test = std::chrono::high_resolution_clock::now();
+    dur_test = end_test - start_test;
+    ns_test = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_test).count();
+    std::cout << "BST 100 searches:\t" << std::fixed << ns_test / NANOS_PER_SECOND << std::endl;
+
+    //search hashtable
+    start_test = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < 100; ++i)
+        ht_test.search(stopwords[i]);
+    end_test = std::chrono::high_resolution_clock::now();
+    dur_test = end_test - start_test;
+    ns_test = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_test).count();
+    std::cout << "HashTable 100 searches:\t" << std::fixed << ns_test / NANOS_PER_SECOND << std::endl;
+
+    //delete from bst
+    start_test = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < 100; ++i)
+        bst_test.delete_word(stopwords[i]);
+    end_test = std::chrono::high_resolution_clock::now();
+    dur_test = end_test - start_test;
+    ns_test = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_test).count();
+    std::cout << "BST 100 deletes:\t" << std::fixed << ns_test / NANOS_PER_SECOND << std::endl;
+
+    //delete hashtable
+    start_test = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < 100; ++i)
+        ht_test.delete_word(stopwords[i]);
+    end_test = std::chrono::high_resolution_clock::now();
+    dur_test = end_test - start_test;
+    ns_test = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_test).count();
+    std::cout << "HashTable 100 deletes:\t" << std::fixed << ns_test / NANOS_PER_SECOND << std::endl;
+
     //loop forever
     while (true)
     {
