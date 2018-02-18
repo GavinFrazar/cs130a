@@ -1,3 +1,4 @@
-# Place dataset in the /build/ directory. Then to build and run the program, enter:
-'make'
-'./main'
+# How to build and run
+* Place dataset in the /build/ directory. From terminal cd into /build/ and type:
+* `make`
+* `./main`
