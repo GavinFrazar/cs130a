@@ -1,4 +1,4 @@
-# Complexity of various operations on a
+# Complexity of various operations on:
 - Binary search tree
 - Hash Table w/ linear probing
 
