@@ -14,7 +14,7 @@ void BST::range(Node * root, const std::string & word1, const std::string & word
     if (root == nullptr)
         return;
 
-    /* if (root->word < word1)
+     if (root->word < word1)
      {
          range(root->right, word1, word2);
      }
@@ -23,12 +23,11 @@ void BST::range(Node * root, const std::string & word1, const std::string & word
          range(root->left, word1, word2);
      }
      else
-     {*/
-    range(root->left, word1, word2);
-    if (root->word >= word1 && root->word <= word2)
-        std::cout << root->word << std::endl;
-    range(root->right, word1, word2);
-
+     {
+       range(root->left, word1, word2);
+       std::cout << root->word << std::endl;
+       range(root->right, word1, word2);
+     }
 }
 
 void BST::sort(Node * root, std::vector<std::string>& sorted_v)

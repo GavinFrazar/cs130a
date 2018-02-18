@@ -98,6 +98,6 @@ std::vector<std::string> HashTable::sort()
 void HashTable::range(const std::string &word1, const std::string &word2)
 {
     for (unsigned int i = 0; i < this->size; ++i)
-        if (table[i]->word >= word1 && table[i]->word <= word2)
-            std::cout << this->table[i]->word << std::endl;
+        if (table[i] != nullptr && table[i]->word >= word1 && table[i]->word <= word2)
+            std::cout << this->table[i]->word << '\n';
 }

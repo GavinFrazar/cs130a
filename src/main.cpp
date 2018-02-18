@@ -112,7 +112,7 @@ int main()
     ns_test = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_test).count();
     std::cout << "BST 100 deletes:\t" << std::fixed << ns_test / NANOS_PER_SECOND << std::endl;
 
-    //delete hashtable
+    //delete from hashtable
     start_test = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < 100; ++i)
         ht_test.delete_word(stopwords[i]);
@@ -205,7 +205,7 @@ int main()
             const std::string sort_output_file = "sort_output.txt";
             std::ofstream out(sort_output_file);
 
-            //time bst insert
+            //time bst sort
             auto start_bst = std::chrono::high_resolution_clock::now();
             const std::vector<std::string>& bst_sorted = bst.sort();
             auto end_bst = std::chrono::high_resolution_clock::now();
@@ -214,7 +214,7 @@ int main()
             for (auto& word : bst_sorted)
                 out << word << "\n";
 
-            //time hashtable insert
+            //time hashtable sort
             auto start_ht = std::chrono::high_resolution_clock::now();
             const std::vector < std::string>& ht_sorted = ht.sort();
             auto end_ht = std::chrono::high_resolution_clock::now();
@@ -234,22 +234,22 @@ int main()
             std::cin >> word1;
             std::cin >> word2;
 
-            //time bst insert
+            //time bst range
             auto start_bst = std::chrono::high_resolution_clock::now();
             bst.range(word1, word2);
             auto end_bst = std::chrono::high_resolution_clock::now();
             auto dur_bst = end_bst - start_bst;
             auto ns_bst = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_bst).count();
 
-            //time hashtable insert
-            //auto start_ht = std::chrono::high_resolution_clock::now();
-            //ht.range(word1, word2);
-            //auto end_ht = std::chrono::high_resolution_clock::now();
-	    // auto dur_ht = end_ht - start_ht;
-            //auto ns_ht = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_ht).count();
+            //time hashtable range
+            auto start_ht = std::chrono::high_resolution_clock::now();
+            ht.range(word1, word2);
+            auto end_ht = std::chrono::high_resolution_clock::now();
+	    auto dur_ht = end_ht - start_ht;
+            auto ns_ht = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_ht).count();
 
             std::cout << "BST: " << std::fixed << ns_bst / NANOS_PER_SECOND << std::endl;
-            //std::cout << "Hash: " << std::fixed << ns_ht / NANOS_PER_SECOND << std::endl;
+            std::cout << "Hash: " << std::fixed << ns_ht / NANOS_PER_SECOND << std::endl;
         }
         else
         {
