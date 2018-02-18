@@ -145,7 +145,7 @@ int main()
         }
         else if (option_select == 4)  //sort option selected
         {
-            const std::string base_path = "/proj01/build/";
+            const std::string base_path = "/cs130a-01/build/";
             const std::string sort_output_file = "sort_output.txt";
             std::ofstream out(sort_output_file);
 
