@@ -91,9 +91,7 @@ std::vector<std::string> HashTable::sort()
         if (this->table[i] != nullptr)
             v.push_back(this->table[i]->word);
     }
-
-    //sort v
-
+    std::sort(v.begin(), v.end());
     return v;
 }
 

@@ -31,13 +31,13 @@ void BST::range(Node * root, const std::string & word1, const std::string & word
 
 }
 
-void BST::sort(Node * root, std::string& output)
+void BST::sort(Node * root, std::vector<std::string>& sorted_v)
 {
     if (root == nullptr)
         return;
-    sort(root->left, output);
-    output.append(root->word + "\n");
-    sort(root->right, output);
+    sort(root->left, sorted_v);
+    sorted_v.push_back(root->word);
+    sort(root->right, sorted_v);
 }
 
 BST::BST()
@@ -185,11 +185,12 @@ void BST::delete_word(const std::string & word)
     }
 }
 
-std::string BST::sort()
+std::vector<std::string> BST::sort()
 {
-    std::string output = "";
-    sort(this->root, output);
-    return output;
+    std::vector<std::string> sorted_v;
+    sorted_v.reserve(this->unique_word_count);
+    this->sort(this->root, sorted_v);
+    return sorted_v;
 }
 
 void BST::range(const std::string & word1, const std::string & word2)
