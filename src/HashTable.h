@@ -27,7 +27,7 @@ protected:
 
     //methods
     unsigned int hashKey(const std::string &word);
-    HashRow*& findRow(const std::string &word, unsigned int hash);
+    unsigned long long findRow(const std::string &word, unsigned int hash);
 public:
     //ctors
     HashTable(unsigned int size);

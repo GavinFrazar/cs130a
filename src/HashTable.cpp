@@ -10,7 +10,7 @@ unsigned int HashTable::hashKey(const std::string &word)
     return hash % this->size;
 }
 
-HashRow*& HashTable::findRow(const std::string &word, unsigned int hash)
+unsigned long long HashTable::findRow(const std::string &word, unsigned int hash)
 {
     auto index = hash;
     do {
@@ -20,7 +20,7 @@ HashRow*& HashTable::findRow(const std::string &word, unsigned int hash)
             index = (index + 1) % this->size;
     } while (index != hash);
 
-    return table[index];
+    return index;
 }
 
 HashTable::HashTable(unsigned int size)
@@ -39,7 +39,8 @@ HashTable::~HashTable()
 bool HashTable::search(const std::string &word)
 {
     auto hash = hashKey(word);
-    HashRow* row_found = findRow(word, hash);
+    auto index = findRow(word, hash);
+    HashRow*& row_found = this->table[index];
     if (row_found != nullptr)
         return row_found->word == word;
     else
@@ -49,7 +50,8 @@ bool HashTable::search(const std::string &word)
 void HashTable::insert(const std::string &word)
 {
     auto hash = hashKey(word);
-    HashRow*& target = findRow(word, hash);
+    auto index = findRow(word, hash);
+    HashRow*& target = this->table[index];
     if (target == nullptr)
         target = new HashRow(word, hash);
     else
@@ -58,7 +60,9 @@ void HashTable::insert(const std::string &word)
 
 void HashTable::delete_word(const std::string &word)
 {
-    unsigned int target_row_index = hashKey(word);
+    //find either the matching word or an empty row
+    auto hash = hashKey(word);
+    auto target_row_index = findRow(word, hash);
     if (table[target_row_index] != nullptr)
     {
         if (table[target_row_index]->count > 1)
@@ -68,7 +72,7 @@ void HashTable::delete_word(const std::string &word)
             delete table[target_row_index];
             table[target_row_index] = nullptr;
             //swap empty row with non-empty row of hash value of equal or less value than the empty row's index
-            for (unsigned int i = (target_row_index + 1) % size; table[i] != nullptr; i = (i + 1) % size)
+            for (unsigned int i = (target_row_index + 1) % size; table[i] != nullptr; i = (i + 1) % this->size)
             {
                 if ((i > target_row_index && (table[i]->hash <= target_row_index || table[i]->hash > i)) ||
                     (i < target_row_index && (table[i]->hash <= target_row_index && table[i]->hash > i)))
