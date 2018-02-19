@@ -26,14 +26,13 @@ private:
 protected:
     //fields
     Node* root;
+    unsigned long long unique_word_count;
 
     //methods
     void delete_tree(Node* root);
     void range(Node* root, const std::string & word1, const std::string & word2);
     void sort(Node* root, std::vector<std::string>& output);
 public:
-
-    unsigned long long unique_word_count;
     //ctor
     BST();
 
@@ -73,5 +72,7 @@ public:
     be sorted.
     */
     void range(const std::string & word1, const std::string & word2);
+
+    unsigned long long getSize();
 };
 #endif

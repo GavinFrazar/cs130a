@@ -101,3 +101,8 @@ void HashTable::range(const std::string &word1, const std::string &word2)
         if (table[i] != nullptr && table[i]->word >= word1 && table[i]->word <= word2)
             std::cout << this->table[i]->word << '\n';
 }
+
+unsigned int HashTable::getSize()
+{
+    return this->size;
+}

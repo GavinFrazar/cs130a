@@ -196,3 +196,8 @@ void BST::range(const std::string & word1, const std::string & word2)
 {
     range(this->root, word1, word2);
 }
+
+unsigned long long BST::getSize()
+{
+    return this->unique_word_count;
+}

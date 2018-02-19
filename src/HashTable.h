@@ -22,8 +22,8 @@ class HashTable
 {
 private:
 protected:
+    unsigned long long size;
     HashRow** table;
-    unsigned int size;
 
     //methods
     unsigned int hashKey(const std::string &word);
@@ -45,6 +45,8 @@ public:
     std::vector<std::string> sort();
 
     void range(const std::string &word1, const std::string &word2);
+
+    unsigned int getSize();
 };
 
 #endif
