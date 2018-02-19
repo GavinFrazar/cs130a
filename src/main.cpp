@@ -63,6 +63,8 @@ int main()
     std::cout << std::boolalpha;
     std::cout.precision(17);
 
+    //uncomment for testing of 100 insert/search/delete operations
+    /*
     //insert into bst
     auto start_test = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < 100; ++i)
@@ -116,6 +118,9 @@ int main()
     dur_test = end_test - start_test;
     ns_test = std::chrono::duration_cast<std::chrono::nanoseconds>(dur_test).count();
     std::cout << "HashTable 100 deletes:\t" << std::fixed << ns_test / NANOS_PER_SECOND << std::endl;
+
+    */
+
     //loop forever
     while (true)
     {
