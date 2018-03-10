@@ -1,11 +1,11 @@
 #include "BST.h"
 
-void BST::delete_tree(Node * root)
+void BST::deleteTree(Node * root)
 {
     if (root == nullptr)
         return;
-    delete_tree(root->left);
-    delete_tree(root->right);
+    deleteTree(root->left);
+    deleteTree(root->right);
     delete root;
 }
 
@@ -39,21 +39,51 @@ void BST::sort(Node * root, std::vector<std::string>& sorted_v)
     sort(root->right, sorted_v);
 }
 
+void BST::deepCopy(Node *& first,Node * const & second)
+{
+    if (second == nullptr)
+        return;
+
+    first = new Node(second->word);
+    first->count = second->count;
+    deepCopy(first->left, second->left);
+    deepCopy(first->right, second->right);
+}
+
 BST::BST()
 {
-    this->root = nullptr;
-    this->unique_word_count = 0;
+    this->root_ = nullptr;
+    this->size_ = 0;
+}
+
+BST::BST(const BST & rhs)
+    :   BST()
+{
+    deepCopy(this->root_, rhs.root_);
+    this->size_ = rhs.size_;
+}
+
+BST::BST(BST && rhs)
+    : BST()
+{
+    swap(*this, rhs);
+}
+
+BST & BST::operator=(BST rhs)
+{
+    swap(*this, rhs);
+    return *this;
 }
 
 BST::~BST()
 {
-    this->delete_tree(this->root);
-    this->unique_word_count = 0;
+    this->deleteTree(this->root_);
+    this->size_ = 0;
 }
 
 bool BST::search(const std::string & word)
 {
-    Node* target = root;
+    Node* target = root_;
     while (target != nullptr)
     {
         int compare = word.compare(target->word);
@@ -69,14 +99,14 @@ bool BST::search(const std::string & word)
 
 void BST::insert(const std::string& word)
 {
-    if (this->root == nullptr)
+    if (this->root_ == nullptr)
     {
-        this->root = new Node(word);
-        ++this->unique_word_count;
+        this->root_ = new Node(word);
+        ++this->size_;
         return;
     }
 
-    Node* target = this->root;
+    Node* target = this->root_;
     while (target != nullptr)
     {
         if (word == target->word)
@@ -92,7 +122,7 @@ void BST::insert(const std::string& word)
             {
                 Node* tmp = new Node(word);
                 target->left = tmp;
-                ++this->unique_word_count;
+                ++this->size_;
                 return;
             }
         }
@@ -104,7 +134,7 @@ void BST::insert(const std::string& word)
             {
                 Node* tmp = new Node(word);
                 target->right = tmp;
-                ++this->unique_word_count;
+                ++this->size_;
                 return;
             }
         }
@@ -113,7 +143,7 @@ void BST::insert(const std::string& word)
 
 void BST::delete_word(const std::string & word)
 {
-    Node* target = this->root;
+    Node* target = this->root_;
     Node** branch_to_target = nullptr;
     while (target != nullptr)
     {
@@ -136,8 +166,8 @@ void BST::delete_word(const std::string & word)
             }
             else
             {
-                if (target == this->root)
-                    branch_to_target = &(this->root);
+                if (target == this->root_)
+                    branch_to_target = &(this->root_);
                 if (target->left != nullptr && target->right != nullptr)  //two children
                 {
                     //find minimum in right subtree
@@ -177,7 +207,7 @@ void BST::delete_word(const std::string & word)
                         *branch_to_target = nullptr;
                 }
                 delete target;
-                --this->unique_word_count;
+                --this->size_;
                 return;
             }
         }
@@ -187,17 +217,24 @@ void BST::delete_word(const std::string & word)
 std::vector<std::string> BST::sort()
 {
     std::vector<std::string> sorted_v;
-    sorted_v.reserve(this->unique_word_count);
-    this->sort(this->root, sorted_v);
+    sorted_v.reserve(this->size_);
+    this->sort(this->root_, sorted_v);
     return sorted_v;
 }
 
 void BST::range(const std::string & word1, const std::string & word2)
 {
-    range(this->root, word1, word2);
+    range(this->root_, word1, word2);
 }
 
-unsigned long long BST::getSize()
+std::size_t BST::getSize()
 {
-    return this->unique_word_count;
+    return this->size_;
+}
+
+void swap(BST & first, BST & second)
+{
+    using std::swap; //ADL
+    swap(first.root_, second.root_);
+    swap(first.size_, second.size_);
 }

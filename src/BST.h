@@ -11,7 +11,6 @@ struct Node
     unsigned int count;
     Node* left;
     Node* right;
-
     Node(const std::string& word)
         : word(word),
         count(1),
@@ -25,19 +24,32 @@ class BST
 private:
 protected:
     //fields
-    Node* root;
-    unsigned long long unique_word_count;
+    Node* root_;
+    std::size_t size_;
 
     //methods
-    void delete_tree(Node* root);
+    void deleteTree(Node* root);
     void range(Node* root, const std::string & word1, const std::string & word2);
     void sort(Node* root, std::vector<std::string>& output);
+    void deepCopy(Node*& first, Node* const & second);
 public:
     //ctor
     BST();
 
+    //copy ctor
+    BST(const BST& rhs);
+    
+    //move ctor
+    BST(BST && rhs);
+
+    //assignment op
+    BST & operator=(BST rhs);
+
     //dtor
     ~BST();
+
+    //swap buddy
+    friend void swap(BST& first, BST& second);
 
     /*
     (b)
@@ -73,6 +85,6 @@ public:
     */
     void range(const std::string & word1, const std::string & word2);
 
-    unsigned long long getSize();
+    std::size_t getSize();
 };
 #endif

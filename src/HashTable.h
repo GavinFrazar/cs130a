@@ -11,9 +11,9 @@ struct HashRow
 {
     std::string word;
     unsigned int count;
-    unsigned int hash;
+    std::size_t hash;
 
-    HashRow(const std::string& word, unsigned int hash)
+    HashRow(const std::string& word, std::size_t hash)
         : word(word), count(1), hash(hash)
     {}
 };
@@ -22,18 +22,31 @@ class HashTable
 {
 private:
 protected:
-    unsigned long long size;
-    HashRow** table;
+    std::size_t size_;
+    HashRow** table_;
 
     //methods
-    unsigned int hashKey(const std::string &word);
-    unsigned long long findRow(const std::string &word, unsigned int hash);
+    std::size_t hashKey(const std::string &word);
+    std::size_t findRow(const std::string &word, std::size_t hash);
 public:
     //ctors
-    HashTable(unsigned int size);
+    HashTable() =delete;
+    HashTable(std::size_t size);
+
+    //copy ctor
+    HashTable(const HashTable& rhs);
+
+    //move ctor
+    HashTable(HashTable && rhs);
+
+    //assignment overload
+    HashTable & operator= (HashTable rhs);
 
     //dtor
     ~HashTable();
+
+    //swap
+    friend void swap(HashTable& first, HashTable& second);
 
     //methods
     bool search(const std::string &word);
@@ -46,7 +59,7 @@ public:
 
     void range(const std::string &word1, const std::string &word2);
 
-    unsigned int getSize();
+    std::size_t getSize();
 };
 
 #endif

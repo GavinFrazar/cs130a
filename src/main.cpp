@@ -56,7 +56,7 @@ int main()
     for (auto& word : words)
         bst.insert(word);
 
-    HashTable ht((unsigned long long)(bst.getSize() * 1.5));
+    HashTable ht((std::size_t)(bst.getSize() * 1.5));
     for (auto& word : words)
         ht.insert(word);
 
